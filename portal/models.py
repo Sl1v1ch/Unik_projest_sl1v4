@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Group(models.Model):
     name = models.CharField(max_length=50, verbose_name="Название группы")
@@ -52,7 +53,10 @@ class Schedule(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="Группа")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name="Предмет")
     day_of_week = models.CharField(max_length=10, choices=DAY_CHOICES, verbose_name="День недели")
-    lesson_number = models.PositiveIntegerField(verbose_name="Номер пары")
+    lesson_number = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        verbose_name="Номер пары"
+    )
     classroom = models.CharField(max_length=50, verbose_name="Аудитория")
     lesson_type = models.CharField(max_length=20, choices=LESSON_TYPES, default='lecture', verbose_name="Тип занятия")
     is_stream = models.BooleanField(default=False, verbose_name="Потоковая лекция")
@@ -61,6 +65,7 @@ class Schedule(models.Model):
         verbose_name = "Расписание"
         verbose_name_plural = "Расписание"
         ordering = ['day_of_week', 'lesson_number']
+        unique_together = ('group', 'day_of_week', 'lesson_number')
 
     def __str__(self):
         return f"{self.get_day_of_week_display()} - {self.lesson_number} пара"
@@ -68,7 +73,11 @@ class Schedule(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, verbose_name="Группа")
-    record_book_number = models.CharField(max_length=20, verbose_name="Номер зачетки")
+    record_book_number = models.CharField(
+        max_length=20,
+        unique=True,
+        verbose_name="Номер зачетки"
+    )
 
     # НОВОЕ: Метод для аналитики в отчете
     def get_average_grade(self):
@@ -85,7 +94,11 @@ class Student(models.Model):
 class Grade(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades', verbose_name="Студент")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name="Предмет")
-    score = models.PositiveIntegerField(default=0, verbose_name="Баллы")
+    score = models.PositiveIntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        verbose_name="Баллы"
+    )
     date_updated = models.DateTimeField(auto_now=True, verbose_name="Дата последнего изменения")
 
     class Meta:
@@ -98,8 +111,16 @@ class Task(models.Model):
     title = models.CharField(max_length=200, verbose_name="Название задания")
     description = models.TextField(verbose_name="Описание/Инструкция")
     deadline = models.DateTimeField(verbose_name="Срок сдачи (дедлайн)")
-    max_attempts = models.PositiveIntegerField(default=3, verbose_name="Макс. кол-во попыток")
-    max_score = models.PositiveIntegerField(default=10, verbose_name="Макс. балл")
+    max_attempts = models.PositiveIntegerField(
+        default=3,
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        verbose_name="Макс. кол-во попыток"
+    )
+    max_score = models.PositiveIntegerField(
+        default=10,
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
+        verbose_name="Макс. балл"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -129,9 +150,24 @@ class Submission(models.Model):
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='submissions', verbose_name="Задание")
     student = models.ForeignKey(Student, on_delete=models.CASCADE, verbose_name="Студент")
+    attempt_number = models.PositiveIntegerField(
+        default=1,
+        verbose_name="Номер попытки"
+    )
     file = models.FileField(upload_to='submissions/%Y/%m/%d/', verbose_name="Файл решения")
     comment = models.TextField(blank=True, verbose_name="Комментарий студента")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='sent', verbose_name="Статус")
+    score = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        verbose_name="Оценка"
+    )
+
+    teacher_comment = models.TextField(
+        blank=True,
+        verbose_name="Комментарий преподавателя"
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата отправки")
 
     def __str__(self):
@@ -140,4 +176,4 @@ class Submission(models.Model):
     class Meta:
         verbose_name = "Решение студента"
         verbose_name_plural = "Решения студентов"
-
+        unique_together = ('task', 'student', 'attempt_number')
