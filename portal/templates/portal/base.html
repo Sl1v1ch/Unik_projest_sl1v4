@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EduPlatform{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+
+        /* Боковая панель */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #fff;
+            border-right: 1px solid #e2e8f0;
+            padding: 24px;
+            z-index: 1050;
+        }
+
+        /* Верхняя панель в основной области */
+        .top-header {
+            margin-left: 280px;
+            height: 70px;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Навигация в сайдбаре */
+        .nav-custom .nav-link {
+            color: #64748b;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-custom .nav-link i { font-size: 1.2rem; }
+
+        .nav-custom .nav-link:hover {
+            background: #f1f5f9;
+            color: #0d6efd;
+        }
+
+        .nav-custom .nav-link.active {
+            background: #0d6efd;
+            color: #fff;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- САЙДБАР -->
+<!-- Боковая панель (Sidebar) -->
+<div class="sidebar">
+    <div class="logo">
+        <h4 class="text-primary fw-bold">EduPlatform <span class="badge bg-light text-primary small" style="font-size: 10px;">v1.0</span></h4>
+    </div>
+
+    <nav class="nav flex-column mt-4">
+        <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">
+            <i class="bi bi-house-door me-2"></i> Главная
+        </a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'schedule' %}active{% endif %}" href="{% url 'schedule' %}">
+            <i class="bi bi-calendar3 me-2"></i> Расписание
+        </a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'subjects_list' %}active{% endif %}" href="{% url 'subjects_list' %}">
+            <i class="bi bi-book me-2"></i> Мои курсы
+        </a>
+    </nav>
+
+    <!-- Нижний блок с кнопкой "Выйти" ОТСЮДА УДАЛЯЕМ (как ты и просил) -->
+</div>
+
+<!-- Верхняя панель (Header) -->
+<header class="top-header d-flex justify-content-between align-items-center px-4 py-2 bg-white border-bottom">
+    <div class="text-muted small fw-bold text-uppercase tracking-wider">Smart University</div>
+
+    <div class="user-menu d-flex align-items-center">
+        <!-- Уведомления и сообщения (как на фото 2) -->
+        <div class="d-flex gap-3 me-3 text-muted">
+            <i class="bi bi-bell-fill position-relative" style="cursor:pointer;">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">1</span>
+            </i>
+            <i class="bi bi-chat-left-text-fill" style="cursor:pointer;"></i>
+        </div>
+
+        {% if user.is_authenticated %}
+        <!-- Выпадающее меню пользователя -->
+        <div class="dropdown">
+            <div class="d-flex align-items-center gap-2" style="cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="fw-bold small">{{ user.first_name }} {{ user.last_name|default:user.username }}</span>
+                <div class="avatar-circle">
+                    {{ user.username|slice:":1"|upper }}
+                </div>
+                <i class="bi bi-chevron-down small text-muted"></i>
+            </div>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" style="border-radius: 12px; min-width: 200px;">
+                <li><a class="dropdown-item py-2" href="{% url 'profile' %}"><i class="bi bi-person me-2"></i> О пользователе</a></li>
+                <li><a class="dropdown-item py-2" href="#"><i class="bi bi-journal-check me-2"></i> Оценки</a></li>
+                <li><a class="dropdown-item py-2" href="#"><i class="bi bi-calendar-event me-2"></i> Календарь</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item py-2 text-danger fw-bold" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Выход</a></li>
+            </ul>
+        </div>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary btn-sm rounded-pill px-3">Войти</a>
+        {% endif %}
+    </div>
+</header>
+
+<!-- ОСНОВНОЙ КОНТЕНТ -->
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Главная | University Portal{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --ui-border: #e2e8f0;
+        --ui-accent: #0d6efd;
+        --importance-high: #dc3545;
+        --importance-medium: #ffc107;
+        --importance-low: #0dcaf0;
+    }
+
+    /* Hero блок с внутренним отступом для чистоты текста */
+    .hero-flat {
+        background-color: #1e293b;
+        border-radius: 20px;
+        padding: 3.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .flat-card {
+        background: #fff;
+        border: 1px solid var(--ui-border);
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .news-border-high { border-left: 5px solid var(--importance-high) !important; }
+    .news-border-medium { border-left: 5px solid var(--importance-medium) !important; }
+    .news-border-low { border-left: 5px solid var(--importance-low) !important; }
+
+    .icon-square {
+        width: 50px; height: 50px;
+        background: #f1f5f9; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--ui-accent); font-size: 1.5rem;
+    }
+
+    .section-title {
+        border-left: 4px solid var(--ui-accent);
+        padding-left: 15px;
+        margin-bottom: 25px;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-flat text-white">
+    <div class="row align-items-center">
+        <div class="col-lg-10">
+            <h1 class="display-5 fw-bold mb-3">Цифровая экосистема университета</h1>
+            <p class="lead opacity-75 mb-0">Интеллектуальная среда для эффективного обучения и удобного взаимодействия студентов и преподавателей.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Блок для гостей: Расписание -->
+{% if not user.is_authenticated %}
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="flat-card p-5 text-center" style="background: linear-gradient(to right, #f8f9fa, #ffffff);">
+            <div class="icon-square mx-auto mb-3" style="width: 60px; height: 60px; background: #eef2ff;">
+                <i class="bi bi-calendar-event text-primary fs-3"></i>
+            </div>
+            <h3 class="fw-bold">Расписание занятий</h3>
+            <p class="text-muted mx-auto" style="max-width: 500px;">Ознакомьтесь с графиком лекций и практик для всех групп колледжа и университета.</p>
+            <a href="{% url 'schedule' %}" class="btn btn-primary px-5 rounded-pill fw-bold">Открыть расписание</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Быстрые ссылки -->
+<div class="row g-3 mb-5">
+    <div class="col-md-3">
+        <div class="flat-card p-4 h-100">
+            <div class="icon-square mb-3"><i class="bi bi-person-badge"></i></div>
+            <h6 class="fw-bold">Абитуриенту</h6>
+            <p class="small text-muted mb-3">Всё о поступлении и правилах приёма в 2026 году.</p>
+            <a href="#" class="btn btn-sm btn-light w-100">Подробнее</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="flat-card p-4 h-100">
+            <div class="icon-square mb-3 text-success"><i class="bi bi-book"></i></div>
+            <h6 class="fw-bold">Колледж</h6>
+            <p class="small text-muted mb-3">Среднее профессиональное образование.</p>
+            <a href="#" class="btn btn-sm btn-light w-100">Подробнее</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="flat-card p-4 h-100">
+            <div class="icon-square mb-3 text-warning"><i class="bi bi-briefcase"></i></div>
+            <h6 class="fw-bold">Карьера</h6>
+            <p class="small text-muted mb-3">Практики и вакансии от наших партнеров.</p>
+            <a href="#" class="btn btn-sm btn-light w-100">Подробнее</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="flat-card p-4 h-100">
+            <div class="icon-square mb-3 text-danger"><i class="bi bi-info-circle"></i></div>
+            <h6 class="fw-bold">Поддержка</h6>
+            <p class="small text-muted mb-3">Помощь в работе с порталом и справки.</p>
+            <a href="#" class="btn btn-sm btn-light w-100">Подробнее</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Новости -->
+    <div class="col-lg-8">
+        <div class="section-title"><h4 class="fw-bold m-0">Новости и объявления</h4></div>
+
+        {% for item in news %}
+        <div class="flat-card mb-3
+            {% if item.importance == 'high' %}news-border-high
+            {% elif item.importance == 'medium' %}news-border-medium
+            {% else %}news-border-low{% endif %}">
+
+            <div class="p-4">
+                <div class="d-flex align-items-center mb-2">
+                    <span class="badge
+                        {% if item.importance == 'high' %}bg-danger
+                        {% elif item.importance == 'medium' %}bg-warning text-dark
+                        {% else %}bg-info text-white{% endif %} me-2">
+                        {{ item.get_importance_display }}
+                    </span>
+                    <small class="text-muted fw-bold">{{ item.created_at|date:"d.m.Y" }}</small>
+                </div>
+                <h5 class="fw-bold">{{ item.title }}</h5>
+                <p class="text-muted small mb-3">{{ item.content|truncatewords:30 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="#" class="text-primary fw-bold text-decoration-none small">Подробнее →</a>
+                    {% if item.target == 'auth' %}
+                        <span class="text-muted small" title="Видно только студентам и преподавателям">
+                            <i class="bi bi-lock-fill"></i> Внутреннее
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-muted">Актуальных новостей пока нет.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Сайдбар -->
+    <div class="col-lg-4">
+        <div class="section-title"><h4 class="fw-bold m-0">Ресурсы</h4></div>
+        <div class="flat-card p-4 bg-white">
+            <div class="mb-3 d-flex align-items-center p-3 rounded-3 bg-light">
+                <i class="bi bi-file-earmark-pdf text-danger fs-3 me-3"></i>
+                <div class="small">
+                    <div class="fw-bold">Учебный план 2026</div>
+                    <a href="#" class="text-muted text-decoration-none">Скачать PDF</a>
+                </div>
+            </div>
+            <div class="d-flex align-items-center p-3 rounded-3 bg-light">
+                <i class="bi bi-megaphone text-primary fs-3 me-3"></i>
+                <div class="small">
+                    <div class="fw-bold">Задать вопрос</div>
+                    <a href="#" class="text-muted text-decoration-none">Чат поддержки</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

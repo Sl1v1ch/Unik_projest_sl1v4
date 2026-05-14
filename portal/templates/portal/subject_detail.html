@@ -1,0 +1,168 @@
+{% extends 'portal/base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Шапка предмета (Тот самый стиль, но без анимации) -->
+    <div class="subject-header shadow-sm mb-4"
+         style="background: linear-gradient(135deg, #0d6efd 0%, #003d99 100%); color: white; border-radius: 20px; padding: 40px;">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="fw-bold mb-2">{{ subject.name }}</h1>
+                <p class="mb-0 opacity-75"><i class="bi bi-person-circle me-2"></i>{{ subject.teacher }}</p>
+            </div>
+            <a href="{% url 'subjects_list' %}" class="btn btn-light btn-sm rounded-pill px-3">Назад к списку</a>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="row">
+        <div class="col-12">
+            <h4 class="fw-bold mb-4">Учебные задания</h4>
+            {% for task in tasks %}
+            <div class="task-card border shadow-sm mb-3"
+                 style="border-radius: 16px; background: #fff; overflow: hidden;">
+
+                <!-- Заголовок-переключатель (Статичный) -->
+                <div class="task-header p-3 d-flex justify-content-between align-items-center"
+                     style="cursor: pointer; background: #fdfdfd;"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#task-body-{{ task.id }}">
+
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-chevron-down text-muted"></i>
+                        <div>
+                            <h5 class="fw-bold mb-0" style="font-size: 1.1rem;">{{ task.title }}</h5>
+                            <span class="text-muted" style="font-size: 0.85rem;">
+                                Срок: {{ task.deadline|date:"d.m.Y H:i" }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3">
+                        {% if task.id in submissions %}
+                        <span class="badge bg-success-subtle text-success border-0 px-3 rounded-pill"
+                              style="font-size: 0.75rem;">Отправлено</span>
+                        {% else %}
+                        <span class="badge bg-light text-muted border px-3 rounded-pill" style="font-size: 0.75rem;">Не сдано</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Разворачиваемая часть -->
+                <div class="collapse" id="task-body-{{ task.id }}">
+                    <div class="p-4 border-top">
+                        <!-- Описание задачи -->
+                        <div class="description-box p-3 rounded-3 mb-4"
+                             style="background: #f8f9fa; border-left: 4px solid #0d6efd;">
+                            <p class="small mb-0 text-secondary">{{ task.description|linebreaksbr }}</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-10 col-lg-12">
+                                <!-- Таблица (исправил баг с тегами из image_daea61.png) -->
+                                <div class="table-responsive border rounded-3">
+                                    <table class="table table-sm mb-0">
+                                        <tbody class="small">
+                                        <tr>
+                                            <td class="py-2 ps-3 fw-bold text-muted bg-light" style="width: 35%;">Состояние оценивания</td>
+                                            <td class="py-2 ps-3">
+                                                {% if task.id in submissions %}
+                                                    {% for t_id, s_obj in submissions.items %}{% if t_id == task.id %}
+                                                        {{ s_obj.get_status_display }}
+                                                    {% endif %}{% endfor %}
+                                                {% else %}Не оценено{% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 ps-3 fw-bold text-muted bg-light">Оставшееся время</td>
+                                            <td class="py-2 ps-3">
+                                                {% if task.id in submissions %}
+                                                    <span class="text-success fw-bold">Работа сдана вовремя</span>
+                                                {% else %}
+                                                    {{ task.deadline|timeuntil }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% if task.id in submissions %}
+                                            {% for t_id, s_obj in submissions.items %}{% if t_id == task.id %}
+                                            <tr>
+                                                <td class="py-2 ps-3 fw-bold text-muted bg-light">Ответ в виде файла</td>
+                                                <td class="py-2 ps-3">
+                                                    <a href="{{ s_obj.file.url }}" class="text-decoration-none">
+                                                        <i class="bi bi-file-earmark-text me-1"></i> {{ s_obj.file.name }}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 ps-3 fw-bold text-muted bg-light">Комментарий</td>
+                                                <td class="py-2 ps-3 text-muted">{{ s_obj.comment|default:"—" }}</td>
+                                            </tr>
+                                            {% endif %}{% endfor %}
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Кнопки управления -->
+                                <div class="mt-4 d-flex align-items-center gap-3">
+                                    <button class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#form-{{ task.id }}">
+                                        <i class="bi bi-pencil-square me-1"></i> Загрузить заново
+                                    </button>
+                                    {% if task.id in submissions %}
+                                    <button class="btn btn-outline-danger btn-sm rounded-pill px-4">Удалить ответ</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Форма загрузки (Без прыжков и черных блоков) -->
+                        <div class="collapse mt-3" id="form-{{ task.id }}">
+                            <div class="p-3 border rounded-3 bg-light shadow-sm">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-md-5">
+                                            <input type="file" name="solution_file" class="form-control form-control-sm border-0" required>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="text" name="comment" class="form-control form-control-sm border-0" placeholder="Комментарий...">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-dark btn-sm w-100 rounded-2">Отправить</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Убираем все переходы и трансформации */
+    * {
+        transition: none !important;
+        transform: none !important;
+    }
+
+    .task-card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; /* Оставляем только легкую тень для фокуса */
+    }
+
+    .task-header:hover {
+        background-color: #f8f9fa !important;
+    }
+
+    /* Исправление отображения инпутов */
+    .form-control-sm {
+        background-color: #fff;
+    }
+</style>
+{% endblock %}

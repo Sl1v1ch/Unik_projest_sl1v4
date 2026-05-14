@@ -1,0 +1,69 @@
+{% extends 'portal/base.html' %}
+
+{% block content %}
+<style>
+    /* Глобальный запрет на любые "прыжки" */
+    * { transition: none !important; transform: none !important; animation: none !important; }
+
+    .day-card { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .day-title { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #dee2e6; font-weight: bold; color: #003d99; }
+    .lesson-box { padding: 12px 15px; border-bottom: 1px solid #f1f1f1; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-box:last-child { border-bottom: none; }
+
+    /* Исправление съехавших аудиторий */
+    .room-label {
+        background: #e9ecef; padding: 5px 10px; border-radius: 5px;
+        font-weight: 600; white-space: nowrap; flex-shrink: 0; margin-left: 10px;
+    }
+    .badge-type { font-size: 10px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: #d1e7ff; color: #0056b3; }
+</style>
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-1">Расписание занятий</h2>
+    <p class="text-muted mb-4">Группа: {{ group_name }}</p>
+
+    <div class="row">
+        <!-- Столбец 1: Пн-Ср -->
+        <div class="col-lg-6">
+            {% for day in col_left %}
+                <div class="day-card">
+                    <div class="day-title">{{ day.name }}</div>
+                    {% for item in day.lessons %}
+                    <div class="lesson-box">
+                        <div>
+                            <div class="badge-type">{{ item.get_lesson_type_display }} #{{ item.lesson_number }}</div>
+                            <div class="fw-bold">{{ item.subject.name }}</div>
+                            <small class="text-muted">{{ item.subject.teacher }}</small>
+                        </div>
+                        <div class="room-label">{{ item.classroom }}</div>
+                    </div>
+                    {% empty %}
+                        <div class="p-3 text-muted small">Нет занятий</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Столбец 2: Чт-Сб -->
+        <div class="col-lg-6">
+            {% for day in col_right %}
+                <div class="day-card">
+                    <div class="day-title">{{ day.name }}</div>
+                    {% for item in day.lessons %}
+                    <div class="lesson-box">
+                        <div>
+                            <div class="badge-type">{{ item.get_lesson_type_display }} #{{ item.lesson_number }}</div>
+                            <div class="fw-bold">{{ item.subject.name }}</div>
+                            <small class="text-muted">{{ item.subject.teacher }}</small>
+                        </div>
+                        <div class="room-label">{{ item.classroom }}</div>
+                    </div>
+                    {% empty %}
+                        <div class="p-3 text-muted small">Нет занятий</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

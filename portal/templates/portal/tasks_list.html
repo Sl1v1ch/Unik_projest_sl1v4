@@ -1,0 +1,30 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Учебные задания{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Актуальные задания</h2>
+
+<div class="row">
+    {% for task in tasks %}
+    <div class="col-md-6 mb-3">
+        <div class="card h-100 shadow-sm border-start border-primary border-4">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ task.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ task.subject.name }}</h6>
+                <p class="card-text text-truncate" style="max-height: 50px;">{{ task.description }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="badge {% if task.deadline < now %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                        До: {{ task.deadline|date:"d.m.Y H:i" }}
+                    </span>
+                    <span class="text-muted small">Макс. балл: {{ task.max_score }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Заданий пока не добавлено.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Левая колонка: Основная инфо -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4 pt-4">
+            <div class="card-body text-center">
+                <div class="avatar-placeholder rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                    <i class="bi bi-person-fill display-4"></i>
+                </div>
+                <h4 class="fw-bold">{{ user.get_full_name|default:user.username }}</h4>
+                <p class="text-muted mb-1">Студент • {{ student.group.name }}</p>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">Обучается</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая колонка: Статистика и Активность -->
+    <div class="col-lg-8">
+        <!-- Виджеты статистики -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-3">
+                    <small class="text-muted fw-bold text-uppercase" style="font-size: 0.65rem;">Курсов в семестре</small>
+                    <h2 class="fw-bold mb-0 text-primary">{{ total_subjects }}</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-3">
+                    <small class="text-muted fw-bold text-uppercase" style="font-size: 0.65rem;">Зачтено работ</small>
+                    <h2 class="fw-bold mb-0 text-success">{{ completed }}</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-3">
+                    <small class="text-muted fw-bold text-uppercase" style="font-size: 0.65rem;">На проверке</small>
+                    <h2 class="fw-bold mb-0 text-warning">{{ pending }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Лента активности -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0">Последние действия</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for act in activities %}
+                    <div class="list-group-item border-0 px-4 py-3 border-bottom">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1 fw-bold">{{ act.task.title }}</h6>
+                                <p class="mb-1 small text-muted">Предмет: {{ act.task.subject.name }}</p>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge {% if act.status == 'done' %}bg-success{% else %}bg-info{% endif %} rounded-pill mb-1 d-block">
+                                    {{ act.get_status_display }}
+                                </span>
+                                <small class="text-muted" style="font-size: 0.7rem;">{{ act.created_at|date:"d.m, H:i" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-clock-history h2"></i>
+                        <p class="mt-2">Активностей пока нет</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
