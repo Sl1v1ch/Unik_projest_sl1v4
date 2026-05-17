@@ -8,9 +8,11 @@ from .models import (
     Task,
     News,
     Teacher,
-    Submission
+    Submission,
+    Specialty
 )
 
+admin.site.register(Specialty)
 
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
@@ -121,3 +123,15 @@ class GradeAdmin(admin.ModelAdmin):
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
+
+@admin.register(Teacher)
+class TeacherAdmin(admin.ModelAdmin):
+    # Какие колонки показывать в списке
+    list_display = ('get_full_name', 'user', 'bio')
+    # По каким полям можно искать
+    search_fields = ('user__last_name', 'user__first_name', 'user__username')
+
+    # Метод, чтобы красиво вывести ФИО в списке
+    def get_full_name(self, obj):
+        return f"{obj.user.last_name} {obj.user.first_name}"
+    get_full_name.short_description = 'ФИО Преподавателя'

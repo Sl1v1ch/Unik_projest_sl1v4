@@ -1,0 +1,108 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Абитуриенту | EduPlatform{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="p-5 mb-5 text-white rounded-5 shadow-lg"
+         style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-primary px-3 py-2 rounded-pill mb-3 text-uppercase fw-bold"
+                      style="letter-spacing: 1px;">Прием 2026</span>
+                <h1 class="display-4 fw-bold mb-3">Стань частью нашего университета</h1>
+                <p class="lead opacity-75 mb-0">Выбирай востребованную специальность и строй свое будущее вместе с
+                    нами.</p>
+            </div>
+            <div class="col-lg-4 text-end d-none d-lg-block">
+                <i class="bi bi-mortarboard opacity-25" style="font-size: 8rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <h3 class="fw-bold mb-4 d-flex align-items-center">
+            <i class="bi bi-list-stars text-primary me-2"></i> Направления подготовки
+        </h3>
+
+        {% for spec_name, variants in grouped_specialties.items %}
+        <div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius: 20px;">
+            <div class="card-header bg-white border-0 p-4"
+                 style="cursor: pointer;"
+                 data-bs-toggle="collapse"
+                 data-bs-target="#specDetails{{ forloop.counter }}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge bg-light text-primary border mb-2">{{ variants.0.code }}</span>
+                        <h4 class="fw-bold mb-0">{{ spec_name }}</h4>
+                    </div>
+                    <i class="bi bi-chevron-down text-muted"></i>
+                </div>
+            </div>
+
+            <div id="specDetails{{ forloop.counter }}" class="collapse">
+                <div class="card-body p-4 bg-light bg-opacity-50 border-top">
+
+                    <ul class="nav nav-pills nav-fill mb-4 bg-white p-1 rounded-pill shadow-sm" role="tablist">
+                        {% for item in variants %}
+                        <li class="nav-item">
+                            <button class="nav-link rounded-pill {% if forloop.first %}active{% endif %}"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#content{{ item.id }}">
+                                После {{ item.base }} класса
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="tab-content">
+                        {% for item in variants %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+                             id="content{{ item.id }}">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-white rounded-4 shadow-sm">
+                                        <div class="text-muted small">Срок обучения</div>
+                                        <div class="fw-bold">
+                                            <i class="bi bi-clock text-primary me-1"></i>
+                                            {{ item.duration_years }}г. {{ item.duration_months }}мес.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="p-3 border rounded-4 bg-white shadow-sm">
+                                            <div class="text-muted small">Стоимость обучения</div>
+                                            <div class="fw-bold text-success">
+                                                <i class="bi bi-wallet2 me-2"></i>
+                                                {% if item.price %}{{ item.price }} ₽ / год{% else %}Бесплатно (Бюджет){% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-3 bg-white rounded-4 shadow-sm">
+                                        <div class="text-muted small">Места (Бюджет / Платно)</div>
+                                        <div class="fw-bold">
+                                            <span class="text-primary">{{ item.seats_budget }}</span> / {{ item.seats_paid }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="mt-4 text-muted small">{{ item.description|default:"Описание направления подготовки..." }}</p>
+                            <div class="d-grid mt-3">
+                                <button class="btn btn-primary rounded-pill fw-bold py-2">Подать заявление</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-light text-center p-5 rounded-5 border-0 shadow-sm">
+            <i class="bi bi-search display-4 d-block mb-3 opacity-25"></i>
+            <h5 class="fw-bold">Направлений пока нет</h5>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}

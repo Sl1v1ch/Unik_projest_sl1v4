@@ -1,65 +1,136 @@
 {% extends 'portal/base.html' %}
 
+{% block title %}Расписание | EduPlatform{% endblock %}
+
 {% block content %}
 <style>
-    /* Глобальный запрет на любые "прыжки" */
-    * { transition: none !important; transform: none !important; animation: none !important; }
-
-    .day-card { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .day-title { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #dee2e6; font-weight: bold; color: #003d99; }
-    .lesson-box { padding: 12px 15px; border-bottom: 1px solid #f1f1f1; display: flex; justify-content: space-between; align-items: center; }
+    .day-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+    .day-title {
+        background: #f8fafc;
+        padding: 12px 20px;
+        border-bottom: 1px solid #e2e8f0;
+        font-weight: 600;
+        color: #0d6efd;
+    }
+    .lesson-box {
+        padding: 15px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
     .lesson-box:last-child { border-bottom: none; }
 
-    /* Исправление съехавших аудиторий */
     .room-label {
-        background: #e9ecef; padding: 5px 10px; border-radius: 5px;
-        font-weight: 600; white-space: nowrap; flex-shrink: 0; margin-left: 10px;
+        background: #f1f5f9;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.9rem;
     }
-    .badge-type { font-size: 10px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: #d1e7ff; color: #0056b3; }
+    .badge-type {
+        font-size: 10px;
+        text-transform: uppercase;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: #e0e7ff;
+        color: #4338ca;
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: inline-block;
+    }
 </style>
 
-<div class="container py-4">
-    <h2 class="fw-bold mb-1">Расписание занятий</h2>
-    <p class="text-muted mb-4">Группа: {{ group_name }}</p>
+<div class="container-fluid">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold m-0">Расписание занятий</h2>
+            <p class="text-muted m-0">Текущая группа: <span class="badge bg-primary">{{ group_name }}</span></p>
+        </div>
+
+        <form method="GET" class="d-flex align-items-center gap-4">
+            <span class="text-muted small fw-bold text-uppercase">Выберите группу:</span>
+            <select name="group_id" class="form-select rounded-pill shadow-sm" onchange="this.form.submit()" style="min-width: 180px;">
+                {% for g in all_groups %}
+                    <option value="{{ g.id }}" {% if g.id == current_group.id %}selected{% endif %}>
+                        {{ g.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if error %}
+        <div class="alert alert-warning border-0 shadow-sm">{{ error }}</div>
+    {% endif %}
 
     <div class="row">
-        <!-- Столбец 1: Пн-Ср -->
-        <div class="col-lg-6">
+        <div class="col-xl-6">
             {% for day in col_left %}
-                <div class="day-card">
-                    <div class="day-title">{{ day.name }}</div>
+                <div class="day-card shadow-sm">
+                    <div class="day-title d-flex justify-content-between">
+                        <span>{{ day.name }}</span>
+                        <i class="bi bi-calendar-check opacity-50"></i>
+                    </div>
                     {% for item in day.lessons %}
                     <div class="lesson-box">
                         <div>
-                            <div class="badge-type">{{ item.get_lesson_type_display }} #{{ item.lesson_number }}</div>
-                            <div class="fw-bold">{{ item.subject.name }}</div>
-                            <small class="text-muted">{{ item.subject.teacher }}</small>
+                            <div class="badge-type">{{ item.get_lesson_type_display }} • Пара #{{ item.lesson_number }}</div>
+                            <div class="fw-bold" style="font-size: 1.1rem;">{{ item.subject.name }}</div>
+                            <div class="text-muted small">
+                                <i class="bi bi-person-workspace me-1"></i>{{ item.subject.teacher }}
+                            </div>
                         </div>
-                        <div class="room-label">{{ item.classroom }}</div>
+                        <div class="text-end">
+                            <div class="room-label">{{ item.classroom }}</div>
+                            {% if item.is_stream %}
+                                <div class="mt-1"><span class="badge bg-warning text-dark" style="font-size: 9px;">ПОТОК</span></div>
+                            {% endif %}
+                        </div>
                     </div>
                     {% empty %}
-                        <div class="p-3 text-muted small">Нет занятий</div>
+                        <div class="p-4 text-center text-muted small">
+                            <i class="bi bi-emoji-smile me-1"></i> Занятий нет
+                        </div>
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
 
-        <!-- Столбец 2: Чт-Сб -->
-        <div class="col-lg-6">
+        <div class="col-xl-6">
             {% for day in col_right %}
-                <div class="day-card">
-                    <div class="day-title">{{ day.name }}</div>
+                <div class="day-card shadow-sm">
+                    <div class="day-title d-flex justify-content-between">
+                        <span>{{ day.name }}</span>
+                        <i class="bi bi-calendar-check opacity-50"></i>
+                    </div>
                     {% for item in day.lessons %}
                     <div class="lesson-box">
                         <div>
-                            <div class="badge-type">{{ item.get_lesson_type_display }} #{{ item.lesson_number }}</div>
-                            <div class="fw-bold">{{ item.subject.name }}</div>
-                            <small class="text-muted">{{ item.subject.teacher }}</small>
+                            <div class="badge-type">{{ item.get_lesson_type_display }} • Пара #{{ item.lesson_number }}</div>
+                            <div class="fw-bold" style="font-size: 1.1rem;">{{ item.subject.name }}</div>
+                            <div class="text-muted small">
+                                <i class="bi bi-person-workspace me-1"></i>{{ item.subject.teacher }}
+                            </div>
                         </div>
-                        <div class="room-label">{{ item.classroom }}</div>
+                        <div class="text-end">
+                            <div class="room-label">{{ item.classroom }}</div>
+                            {% if item.is_stream %}
+                                <div class="mt-1"><span class="badge bg-warning text-dark" style="font-size: 9px;">ПОТОК</span></div>
+                            {% endif %}
+                        </div>
                     </div>
                     {% empty %}
-                        <div class="p-3 text-muted small">Нет занятий</div>
+                        <div class="p-4 text-center text-muted small">
+                            <i class="bi bi-emoji-smile me-1"></i> Занятий нет
+                        </div>
                     {% endfor %}
                 </div>
             {% endfor %}

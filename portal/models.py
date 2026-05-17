@@ -177,3 +177,28 @@ class Submission(models.Model):
         verbose_name = "Решение студента"
         verbose_name_plural = "Решения студентов"
         unique_together = ('task', 'student', 'attempt_number')
+
+
+class Specialty(models.Model):
+    EDUCATION_BASE = [
+        ('9', 'На базе 9 классов'),
+        ('11', 'На базе 11 классов'),
+    ]
+    name = models.CharField('Название', max_length=200)
+    code = models.CharField('Код (ОКСО)', max_length=20)
+
+    base = models.CharField('База образования', max_length=2, choices=EDUCATION_BASE, default='9')
+    duration_years = models.IntegerField('Лет обучения', default=3)
+    duration_months = models.IntegerField('Месяцев обучения', default=10)
+
+    description = models.TextField('Описание', blank=True)
+    seats_budget = models.IntegerField('Бюджетных мест', default=0)
+    seats_paid = models.IntegerField('Платных мест', default=0)
+    price = models.IntegerField('Стоимость в год', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Специальность'
+        verbose_name_plural = 'Специальности'
+
+    def __str__(self):
+        return f"{self.name} ({self.get_base_display()})"
