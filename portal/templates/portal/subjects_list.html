@@ -7,7 +7,7 @@
     <h2 class="fw-bold">Доступные дисциплины</h2>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'index' %}">Главная</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'portal:index' %}">Главная</a></li>
             <li class="breadcrumb-item active">Курсы</li>
         </ol>
     </nav>
@@ -16,7 +16,7 @@
 <div class="row g-4">
     {% for subject in subjects %}
     <div class="col-md-6 col-lg-4">
-        <div class="card h-100 border-0 shadow-sm transition-up" style="cursor: pointer;" onclick="location.href='{% url 'subject_detail' subject.id %}'">
+        <div class="card h-100 border-0 shadow-sm transition-up" style="cursor: pointer;" onclick="location.href='{% url 'portal:subject_detail' subject.id %}'">
             <div class="card-body p-4">
                 <div class="d-flex align-items-center mb-3">
                     <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">

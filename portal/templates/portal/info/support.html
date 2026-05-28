@@ -1,0 +1,218 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Поддержка | EduPlatform{% endblock %}
+
+{% block page_title %}Поддержка{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- HERO -->
+    <div class="p-5 mb-5 text-white rounded-5 shadow-lg"
+         style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-primary px-3 py-2 rounded-pill mb-3 text-uppercase fw-bold"
+                      style="letter-spacing: 1px;">Служба поддержки</span>
+                <h1 class="display-4 fw-bold mb-3">Чем можем помочь?</h1>
+                <p class="lead opacity-75 mb-0">
+                    Ответы на частые вопросы, контакты нужных отделов и способы связаться с нами.
+                </p>
+            </div>
+            <div class="col-lg-4 text-end d-none d-lg-block">
+                <i class="bi bi-headset opacity-25" style="font-size: 8rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- FAQ -->
+        <div class="col-lg-8">
+            <h3 class="fw-bold mb-4 d-flex align-items-center">
+                <i class="bi bi-patch-question text-primary me-2"></i> Частые вопросы
+            </h3>
+
+            <div class="accordion d-flex flex-column gap-3" id="faqAccordion">
+
+                <!-- Блок 1: Учёба -->
+                <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-header bg-white border-0 p-4 fw-bold d-flex align-items-center gap-2"
+                         style="cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#faq-study">
+                        <i class="bi bi-book text-primary"></i> Учебный процесс
+                        <i class="bi bi-chevron-down ms-auto text-muted"></i>
+                    </div>
+                    <div id="faq-study" class="collapse show" data-bs-parent="#faqAccordion">
+                        <div class="card-body p-0">
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Где посмотреть своё расписание?</div>
+                                <div class="text-muted small">Расписание доступно в разделе
+                                    <a href="{% url 'portal:schedule' %}" class="text-primary text-decoration-none fw-bold">«Расписание»</a>
+                                    — оно автоматически показывает занятия вашей группы.
+                                </div>
+                            </div>
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Как сдать задание через портал?</div>
+                                <div class="text-muted small">Зайдите в раздел «Мои курсы» → выберите предмет → найдите нужное задание и нажмите «Загрузить ответ». Убедитесь что не истёк дедлайн.</div>
+                            </div>
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Сколько попыток есть на сдачу задания?</div>
+                                <div class="text-muted small">Количество попыток устанавливает преподаватель. Лимит отображается прямо в карточке задания.</div>
+                            </div>
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Где посмотреть свои оценки?</div>
+                                <div class="text-muted small">Оценки отображаются в разделе «Мои курсы» → выбранный предмет. Итоговые оценки — в профиле.</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Блок 2: Аккаунт -->
+                <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-header bg-white border-0 p-4 fw-bold d-flex align-items-center gap-2"
+                         style="cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#faq-account">
+                        <i class="bi bi-person-circle text-primary"></i> Аккаунт и доступ
+                        <i class="bi bi-chevron-down ms-auto text-muted"></i>
+                    </div>
+                    <div id="faq-account" class="collapse" data-bs-parent="#faqAccordion">
+                        <div class="card-body p-0">
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Забыл пароль — что делать?</div>
+                                <div class="text-muted small">Обратитесь в учебную часть или к администратору портала. Сброс пароля производится вручную — напишите на <span class="text-primary fw-bold">support@vf.volsu.ru</span>.</div>
+                            </div>
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Данные в профиле отображаются неверно</div>
+                                <div class="text-muted small">Данные синхронизируются с системой учебной части. Если в профиле ошибка — обратитесь в деканат или к системному администратору.</div>
+                            </div>
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Я вижу чужое расписание или чужую группу</div>
+                                <div class="text-muted small">Сообщите администратору через форму ниже — это технический сбой, который требует ручного исправления в базе данных.</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Блок 3: Технические -->
+                <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-header bg-white border-0 p-4 fw-bold d-flex align-items-center gap-2"
+                         style="cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#faq-tech">
+                        <i class="bi bi-tools text-primary"></i> Технические вопросы
+                        <i class="bi bi-chevron-down ms-auto text-muted"></i>
+                    </div>
+                    <div id="faq-tech" class="collapse" data-bs-parent="#faqAccordion">
+                        <div class="card-body p-0">
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Не загружается файл задания</div>
+                                <div class="text-muted small">Убедитесь что размер файла не превышает 10 МБ и формат поддерживается (PDF, DOCX, ZIP, JPG, PNG). Попробуйте другой браузер.</div>
+                            </div>
+
+                            <div class="border-top p-4">
+                                <div class="fw-bold mb-1">Портал не открывается или работает медленно</div>
+                                <div class="text-muted small">Попробуйте очистить кеш браузера (Ctrl+Shift+Del) или открыть в режиме инкогнито. Если проблема сохраняется — сообщите нам.</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- КОНТАКТЫ ПОДДЕРЖКИ -->
+        <div class="col-lg-4 d-flex flex-column gap-4">
+
+            <h3 class="fw-bold mb-0 d-flex align-items-center">
+                <i class="bi bi-telephone text-primary me-2"></i> Связаться с нами
+            </h3>
+
+            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                <div class="card-body p-4 d-flex flex-column gap-3">
+
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:40px;height:40px;background:#eff6ff;">
+                            <i class="bi bi-envelope text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold small">Email поддержки</div>
+                            <a href="mailto:support@vf.volsu.ru" class="text-primary small text-decoration-none">support@vf.volsu.ru</a>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:40px;height:40px;background:#eff6ff;">
+                            <i class="bi bi-telephone text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold small">Телефон</div>
+                            <div class="text-muted small">+7 (8443) 27-00-01</div>
+                            <div class="text-muted" style="font-size: 11px;">Пн–Пт, 9:00–17:00</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:40px;height:40px;background:#eff6ff;">
+                            <i class="bi bi-geo-alt text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold small">Очно</div>
+                            <div class="text-muted small">Корпус А, каб. 101<br>Пн–Пт, 10:00–16:00</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ОТДЕЛЫ -->
+            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Нужные отделы</h5>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3">
+                            <div>
+                                <div class="fw-bold small">Деканат</div>
+                                <div class="text-muted" style="font-size: 11px;">каб. 201</div>
+                            </div>
+                            <span class="text-muted small">27-00-10</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3">
+                            <div>
+                                <div class="fw-bold small">Учебная часть</div>
+                                <div class="text-muted" style="font-size: 11px;">каб. 105</div>
+                            </div>
+                            <span class="text-muted small">27-00-11</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3">
+                            <div>
+                                <div class="fw-bold small">IT-отдел</div>
+                                <div class="text-muted" style="font-size: 11px;">каб. 310</div>
+                            </div>
+                            <span class="text-muted small">27-00-20</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3">
+                            <div>
+                                <div class="fw-bold small">Библиотека</div>
+                                <div class="text-muted" style="font-size: 11px;">каб. 002</div>
+                            </div>
+                            <span class="text-muted small">27-00-30</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

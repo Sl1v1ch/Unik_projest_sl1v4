@@ -2,17 +2,20 @@
 
 {% block title %}Абитуриенту | EduPlatform{% endblock %}
 
+{% block page_title %}Абитуриенту{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
+
+    <!-- HERO -->
     <div class="p-5 mb-5 text-white rounded-5 shadow-lg"
          style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
         <div class="row align-items-center">
             <div class="col-lg-8">
                 <span class="badge bg-primary px-3 py-2 rounded-pill mb-3 text-uppercase fw-bold"
-                      style="letter-spacing: 1px;">Прием 2026</span>
+                      style="letter-spacing: 1px;">Приём 2026</span>
                 <h1 class="display-4 fw-bold mb-3">Стань частью нашего университета</h1>
-                <p class="lead opacity-75 mb-0">Выбирай востребованную специальность и строй свое будущее вместе с
-                    нами.</p>
+                <p class="lead opacity-75 mb-0">Выбирай востребованную специальность и строй своё будущее вместе с нами.</p>
             </div>
             <div class="col-lg-4 text-end d-none d-lg-block">
                 <i class="bi bi-mortarboard opacity-25" style="font-size: 8rem;"></i>
@@ -20,13 +23,44 @@
         </div>
     </div>
 
-    <div class="col-lg-8">
+    <!-- БЫСТРЫЕ ФАКТЫ -->
+    <div class="row g-4 mb-5">
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">12</div>
+                <div class="text-muted small">специальностей</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">9–11</div>
+                <div class="text-muted small">класс для поступления</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">89%</div>
+                <div class="text-muted small">трудоустройство</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">∞</div>
+                <div class="text-muted small">возможностей</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- НАПРАВЛЕНИЯ -->
+    <div class="col-lg-9">
         <h3 class="fw-bold mb-4 d-flex align-items-center">
             <i class="bi bi-list-stars text-primary me-2"></i> Направления подготовки
         </h3>
 
         {% for spec_name, variants in grouped_specialties.items %}
         <div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius: 20px;">
+
+            <!-- ЗАГОЛОВОК СПЕЦИАЛЬНОСТИ -->
             <div class="card-header bg-white border-0 p-4"
                  style="cursor: pointer;"
                  data-bs-toggle="collapse"
@@ -35,21 +69,32 @@
                     <div>
                         <span class="badge bg-light text-primary border mb-2">{{ variants.0.code }}</span>
                         <h4 class="fw-bold mb-0">{{ spec_name }}</h4>
+                        <!-- ИСПРАВЛЕНИЕ 1: subtitle теперь светлее — text-muted + уменьшен размер -->
+                        <div class="small mt-1" style="color: #a0aec0; font-size: 0.8rem;">
+                            {{ variants|length }} вариант{% if variants|length == 1 %}{% else %}а{% endif %} поступления
+                        </div>
                     </div>
-                    <i class="bi bi-chevron-down text-muted"></i>
+                    <i class="bi bi-chevron-down text-muted fs-5"></i>
                 </div>
             </div>
 
+            <!-- ДЕТАЛИ -->
             <div id="specDetails{{ forloop.counter }}" class="collapse">
-                <div class="card-body p-4 bg-light bg-opacity-50 border-top">
+                <div class="card-body p-4 border-top" style="background: #f8fafc;">
 
+                    <!-- ТАБЫ: после 9 / после 11 -->
+                    <!-- ИСПРАВЛЕНИЕ 2: неактивный таб теперь нейтральный (серый текст, без синего) -->
+                    <style>
+                        .nav-pills .nav-link { color: #6c757d; background: transparent; }
+                        .nav-pills .nav-link.active { color: #fff; background-color: #0d6efd; }
+                    </style>
                     <ul class="nav nav-pills nav-fill mb-4 bg-white p-1 rounded-pill shadow-sm" role="tablist">
                         {% for item in variants %}
                         <li class="nav-item">
-                            <button class="nav-link rounded-pill {% if forloop.first %}active{% endif %}"
+                            <button class="nav-link rounded-pill fw-bold {% if forloop.first %}active{% endif %}"
                                     data-bs-toggle="pill"
                                     data-bs-target="#content{{ item.id }}">
-                                После {{ item.base }} класса
+                                <i class="bi bi-mortarboard me-1"></i>После {{ item.base }} класса
                             </button>
                         </li>
                         {% endfor %}
@@ -59,39 +104,62 @@
                         {% for item in variants %}
                         <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
                              id="content{{ item.id }}">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="p-3 bg-white rounded-4 shadow-sm">
-                                        <div class="text-muted small">Срок обучения</div>
-                                        <div class="fw-bold">
-                                            <i class="bi bi-clock text-primary me-1"></i>
+
+                            <!-- КАРТОЧКИ: срок / стоимость / места -->
+                            <!-- ИСПРАВЛЕНИЕ 3: padding увеличен с p-3 до p-4 для воздуха -->
+                            <div class="row g-3 mb-4">
+
+                                <div class="col-md-4">
+                                    <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+                                        <div class="text-muted small mb-2">
+                                            <i class="bi bi-clock text-primary me-1"></i>Срок обучения
+                                        </div>
+                                        <div class="fw-bold fs-5">
                                             {{ item.duration_years }}г. {{ item.duration_months }}мес.
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="p-3 border rounded-4 bg-white shadow-sm">
-                                            <div class="text-muted small">Стоимость обучения</div>
-                                            <div class="fw-bold text-success">
-                                                <i class="bi bi-wallet2 me-2"></i>
-                                                {% if item.price %}{{ item.price }} ₽ / год{% else %}Бесплатно (Бюджет){% endif %}
-                                            </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+                                        <div class="text-muted small mb-2">
+                                            <i class="bi bi-wallet2 text-primary me-1"></i>Стоимость / год
+                                        </div>
+                                        <div class="fw-bold fs-5 {% if item.price %}text-dark{% else %}text-success{% endif %}">
+                                            {% if item.price %}{{ item.price }} ₽{% else %}Бесплатно{% endif %}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="p-3 bg-white rounded-4 shadow-sm">
-                                        <div class="text-muted small">Места (Бюджет / Платно)</div>
-                                        <div class="fw-bold">
-                                            <span class="text-primary">{{ item.seats_budget }}</span> / {{ item.seats_paid }}
+
+                                <div class="col-md-4">
+                                    <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+                                        <div class="text-muted small mb-2">
+                                            <i class="bi bi-people text-primary me-1"></i>Бюджет / Платно
+                                        </div>
+                                        <div class="fw-bold fs-5">
+                                            <span class="text-primary">{{ item.seats_budget }}</span>
+                                            <span class="text-muted fw-normal"> / </span>
+                                            {{ item.seats_paid }}
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
-                            <p class="mt-4 text-muted small">{{ item.description|default:"Описание направления подготовки..." }}</p>
-                            <div class="d-grid mt-3">
-                                <button class="btn btn-primary rounded-pill fw-bold py-2">Подать заявление</button>
+                            <!-- ОПИСАНИЕ -->
+                            <p class="text-muted small mb-4">
+                                {{ item.description|default:"Описание направления подготовки будет добавлено позже." }}
+                            </p>
+
+                            <!-- КНОПКА -->
+                            <!-- ИСПРАВЛЕНИЕ 4: убрали d-grid (растяжка на всю ширину), кнопка по левому краю -->
+                            <div>
+                                <a href="mailto:priem@vf.volsu.ru?subject=Заявление на поступление: {{ spec_name }}"
+                                   class="btn btn-primary rounded-pill fw-bold py-2 px-4">
+                                    <i class="bi bi-send me-2"></i>Подать заявление
+                                </a>
                             </div>
+
                         </div>
                         {% endfor %}
                     </div>
@@ -102,7 +170,10 @@
         <div class="alert alert-light text-center p-5 rounded-5 border-0 shadow-sm">
             <i class="bi bi-search display-4 d-block mb-3 opacity-25"></i>
             <h5 class="fw-bold">Направлений пока нет</h5>
+            <p class="text-muted small mb-0">Информация о приёме появится позже.</p>
         </div>
         {% endfor %}
     </div>
-    {% endblock %}
+
+</div>
+{% endblock %}

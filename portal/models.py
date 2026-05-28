@@ -19,7 +19,7 @@ class Teacher(models.Model):
     photo = models.ImageField(upload_to='teachers/', null=True, blank=True, verbose_name="Фотография")
 
     def __str__(self):
-        return f"{self.user.last_name} {self.user.first_name}"
+        return f"{self.user.first_name} {self.user.last_name}"
 
     class Meta:
         verbose_name = "Преподаватель"

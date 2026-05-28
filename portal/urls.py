@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'portal'
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('schedule/', views.schedule_view, name='schedule'),
@@ -16,7 +18,7 @@ urlpatterns = [
     path('dashboard/', views.teacher_dashboard_view, name='teacher_dashboard'),
     path('admission/', views.admission_view, name='admission'),
     path('career/', views.career_view, name='career'),
-    path('college/', views.college_view, name='college'),
+    path('information/', views.college_view, name='information'),
     path('support/', views.support_view, name='support'),
     path('news/<int:pk>/', views.news_detail_view, name='news_detail'),
 ]

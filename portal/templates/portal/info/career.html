@@ -1,0 +1,193 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Карьера | EduPlatform{% endblock %}
+
+{% block page_title %}Карьера{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- HERO -->
+    <div class="p-5 mb-5 text-white rounded-5 shadow-lg"
+         style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-primary px-3 py-2 rounded-pill mb-3 text-uppercase fw-bold"
+                      style="letter-spacing: 1px;">Карьерный центр</span>
+                <h1 class="display-4 fw-bold mb-3">Найди своё место в профессии</h1>
+                <p class="lead opacity-75 mb-0">
+                    Актуальные вакансии, стажировки и партнёры университета — всё в одном месте.
+                </p>
+            </div>
+            <div class="col-lg-4 text-end d-none d-lg-block">
+                <i class="bi bi-briefcase opacity-25" style="font-size: 8rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- СТАТИСТИКА -->
+    <div class="row g-4 mb-5">
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">{{ jobs_count }}</div>
+                <div class="text-muted small">актуальных вакансий</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">30+</div>
+                <div class="text-muted small">партнёров-работодателей</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">89%</div>
+                <div class="text-muted small">трудоустройство выпускников</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">5</div>
+                <div class="text-muted small">стажировок в этом семестре</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- ВАКАНСИИ -->
+        <div class="col-lg-8">
+            <h3 class="fw-bold mb-4 d-flex align-items-center">
+                <i class="bi bi-list-stars text-primary me-2"></i> Вакансии для студентов
+            </h3>
+
+            {% for job in vacancies %}
+            <div class="card border-0 shadow-sm mb-3 overflow-hidden" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            <span class="badge bg-light text-primary border mb-2">{{ job.company }}</span>
+                            <h5 class="fw-bold mb-1">{{ job.title }}</h5>
+                            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>{{ job.location }}</div>
+                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">{{ job.salary }}</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <!-- Заглушки вакансий -->
+            {% for item in "123456"|make_list %}
+            <div class="card border-0 shadow-sm mb-3 overflow-hidden" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <div>
+                            {% if forloop.counter == 1 %}
+                            <span class="badge bg-light text-primary border mb-2">ПАО «Волжский трубный завод»</span>
+                            <h5 class="fw-bold mb-1">Техник по обслуживанию оборудования</h5>
+                            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>Волжский, полная занятость</div>
+                            {% elif forloop.counter == 2 %}
+                            <span class="badge bg-light text-primary border mb-2">IT-компания «СофтЛаб»</span>
+                            <h5 class="fw-bold mb-1">Junior Python-разработчик (стажировка)</h5>
+                            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>Удалённо, частичная занятость</div>
+                            {% elif forloop.counter == 3 %}
+                            <span class="badge bg-light text-primary border mb-2">Сбербанк</span>
+                            <h5 class="fw-bold mb-1">Операционист (практика)</h5>
+                            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>Волжский, частичная занятость</div>
+                            {% elif forloop.counter == 4 %}
+                            <span class="badge bg-light text-primary border mb-2">Администрация г. Волжский</span>
+                            <h5 class="fw-bold mb-1">Специалист по документообороту</h5>
+                            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>Волжский, полная занятость</div>
+                            {% elif forloop.counter == 5 %}
+                            <span class="badge bg-light text-primary border mb-2">ООО «ТехноСервис»</span>
+                            <h5 class="fw-bold mb-1">Сетевой администратор</h5>
+                            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>Волгоград, полная занятость</div>
+                            {% elif forloop.counter == 6 %}
+                            <span class="badge bg-light text-primary border mb-2">Школа №15</span>
+                            <h5 class="fw-bold mb-1">Лаборант кабинета информатики</h5>
+                            <div class="text-muted small"><i class="bi bi-geo-alt me-1"></i>Волжский, частичная занятость</div>
+                            {% endif %}
+                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+                            {% if forloop.counter == 1 %}от 35 000 ₽
+                            {% elif forloop.counter == 2 %}от 25 000 ₽
+                            {% elif forloop.counter == 3 %}от 20 000 ₽
+                            {% elif forloop.counter == 4 %}от 30 000 ₽
+                            {% elif forloop.counter == 5 %}от 40 000 ₽
+                            {% elif forloop.counter == 6 %}от 18 000 ₽
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+
+        <!-- САЙДБАР: советы + партнёры -->
+        <div class="col-lg-4 d-flex flex-column gap-4">
+
+            <!-- КАК МЫ ПОМОГАЕМ -->
+            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3 d-flex align-items-center">
+                        <i class="bi bi-stars text-primary me-2"></i> Как мы помогаем
+                    </h5>
+                    <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-check-circle-fill text-primary mt-1 flex-shrink-0"></i>
+                            <span class="small text-muted">Помогаем составить резюме и подготовиться к собеседованию</span>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-check-circle-fill text-primary mt-1 flex-shrink-0"></i>
+                            <span class="small text-muted">Организуем встречи с представителями работодателей</span>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-check-circle-fill text-primary mt-1 flex-shrink-0"></i>
+                            <span class="small text-muted">Направляем на оплачиваемые стажировки ещё во время учёбы</span>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-check-circle-fill text-primary mt-1 flex-shrink-0"></i>
+                            <span class="small text-muted">Помогаем с трудоустройством после окончания</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ПАРТНЁРЫ -->
+            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3 d-flex align-items-center">
+                        <i class="bi bi-handshake text-primary me-2"></i> Партнёры
+                    </h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill" style="font-size: 12px;">ВТЗ</span>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill" style="font-size: 12px;">Сбербанк</span>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill" style="font-size: 12px;">ВолГУ</span>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill" style="font-size: 12px;">Ростелеком</span>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill" style="font-size: 12px;">МФЦ</span>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill" style="font-size: 12px;">СофтЛаб</span>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill" style="font-size: 12px;">Администрация</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- КОНТАКТ КАРЬЕРНОГО ЦЕНТРА -->
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; background: linear-gradient(135deg, #eff6ff, #dbeafe);">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-2">Карьерный центр</h5>
+                    <p class="text-muted small mb-3">Есть вопросы по трудоустройству? Обратись к нам напрямую.</p>
+                    <div class="small text-muted d-flex flex-column gap-2">
+                        <span><i class="bi bi-geo-alt me-2 text-primary"></i>Корпус А, каб. 112</span>
+                        <span><i class="bi bi-clock me-2 text-primary"></i>Пн–Пт, 10:00–16:00</span>
+                        <span><i class="bi bi-envelope me-2 text-primary"></i>career@vf.volsu.ru</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}О колледже | EduPlatform{% endblock %}
+
+{% block page_title %}О колледже{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- HERO -->
+    <div class="p-5 mb-5 text-white rounded-5 shadow-lg"
+         style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-primary px-3 py-2 rounded-pill mb-3 text-uppercase fw-bold"
+                      style="letter-spacing: 1px;">Волжский филиал ВолГУ</span>
+                <h1 class="display-4 fw-bold mb-3">Образование с историей</h1>
+                <p class="lead opacity-75 mb-0">Мы готовим специалистов для реальной экономики региона с 1978 года.</p>
+            </div>
+            <div class="col-lg-4 text-end d-none d-lg-block">
+                <i class="bi bi-building opacity-25" style="font-size: 8rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЦИФРЫ -->
+    <div class="row g-4 mb-5">
+        {% for item in stats %}
+        {% empty %}
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">45+</div>
+                <div class="text-muted small">лет работы</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">1200+</div>
+                <div class="text-muted small">студентов</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">80+</div>
+                <div class="text-muted small">преподавателей</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-4 h-100" style="border-radius: 20px;">
+                <div class="display-5 fw-bold text-primary mb-1">12</div>
+                <div class="text-muted small">специальностей</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row g-4">
+
+        <!-- О НАС -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-3 d-flex align-items-center">
+                        <i class="bi bi-info-circle text-primary me-2"></i> О нас
+                    </h3>
+                    <p class="text-muted">
+                        Волжский филиал Волгоградского государственного университета — современное учебное заведение,
+                        реализующее программы среднего профессионального образования по техническим и экономическим направлениям.
+                    </p>
+                    <p class="text-muted mb-0">
+                        Наши выпускники успешно работают в крупнейших предприятиях Волгоградской области и за её пределами.
+                        Мы обеспечиваем студентам современную учебно-материальную базу, практикоориентированное обучение
+                        и тесное сотрудничество с работодателями региона.
+                    </p>
+                </div>
+            </div>
+
+            <!-- СТРУКТУРА -->
+            <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-4 d-flex align-items-center">
+                        <i class="bi bi-diagram-3 text-primary me-2"></i> Структура
+                    </h3>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 d-flex align-items-start gap-3">
+                                <div class="mt-1"><i class="bi bi-person-workspace text-primary fs-5"></i></div>
+                                <div>
+                                    <div class="fw-bold small">Учебная часть</div>
+                                    <div class="text-muted" style="font-size: 13px;">Организация учебного процесса, расписание, успеваемость</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 d-flex align-items-start gap-3">
+                                <div class="mt-1"><i class="bi bi-people text-primary fs-5"></i></div>
+                                <div>
+                                    <div class="fw-bold small">Студенческий совет</div>
+                                    <div class="text-muted" style="font-size: 13px;">Внеучебная деятельность, мероприятия, инициативы</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 d-flex align-items-start gap-3">
+                                <div class="mt-1"><i class="bi bi-laptop text-primary fs-5"></i></div>
+                                <div>
+                                    <div class="fw-bold small">IT-отдел</div>
+                                    <div class="text-muted" style="font-size: 13px;">Поддержка инфраструктуры, образовательные платформы</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 d-flex align-items-start gap-3">
+                                <div class="mt-1"><i class="bi bi-heart-pulse text-primary fs-5"></i></div>
+                                <div>
+                                    <div class="fw-bold small">Психологическая служба</div>
+                                    <div class="text-muted" style="font-size: 13px;">Поддержка студентов, консультации, адаптация</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КОНТАКТЫ -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-4 d-flex align-items-center">
+                        <i class="bi bi-geo-alt text-primary me-2"></i> Контакты
+                    </h3>
+                    <ul class="list-unstyled d-flex flex-column gap-3">
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-pin-map text-primary mt-1"></i>
+                            <div>
+                                <div class="fw-bold small">Адрес</div>
+                                <div class="text-muted small">404130, Волгоградская обл., г. Волжский, ул. 40 лет Победы, 11</div>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-telephone text-primary mt-1"></i>
+                            <div>
+                                <div class="fw-bold small">Телефон</div>
+                                <div class="text-muted small">+7 (8443) 27-00-00</div>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-envelope text-primary mt-1"></i>
+                            <div>
+                                <div class="fw-bold small">Email</div>
+                                <div class="text-muted small">info@vf.volsu.ru</div>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-clock text-primary mt-1"></i>
+                            <div>
+                                <div class="fw-bold small">Часы работы</div>
+                                <div class="text-muted small">Пн–Пт: 8:00 – 17:00<br>Сб: 9:00 – 14:00</div>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start gap-3">
+                            <i class="bi bi-globe text-primary mt-1"></i>
+                            <div>
+                                <div class="fw-bold small">Сайт</div>
+                                <a href="https://vf.volsu.ru" target="_blank" class="text-primary small text-decoration-none">vf.volsu.ru</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
